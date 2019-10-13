@@ -80,6 +80,8 @@
 //! - The numbers reported correspond to the successful path (i.e. `Some` is returned by `dequeue`
 //! and `Ok` is returned by `enqueue`).
 
+#![allow(clippy::new_without_default)]
+
 use core::{cell::UnsafeCell, fmt, hash, marker::PhantomData, mem::MaybeUninit, ptr};
 
 use generic_array::{ArrayLength, GenericArray};
@@ -590,7 +592,7 @@ macro_rules! iterator {
                     let ptr = self.rb.0.buffer.$asptr() as $ptr;
                     let i = (head + self.index) % cap;
                     self.index += 1;
-                    Some(unsafe { $mkref!(*ptr.offset(i as isize)) })
+                    Some(unsafe { $mkref!(*ptr.add(i)) })
                 } else {
                     None
                 }

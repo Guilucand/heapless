@@ -41,7 +41,7 @@
 //!
 //! #[exception]
 //! fn SysTick() {
-//!     static mut COUNT: u8 = 0;
+//!     static mut COUNT: u32 = 0;
 //!
 //!     Q.enqueue(*COUNT).ok();
 //!     *COUNT += 1;
@@ -83,25 +83,25 @@
 use core::{
     cell::UnsafeCell,
     mem::MaybeUninit,
-    sync::atomic::{AtomicU8, Ordering},
+    sync::atomic::{AtomicU32, Ordering},
 };
 
 /// MPMC queue with a capacity for 2 elements
 pub struct Q2<T> {
     buffer: UnsafeCell<[Cell<T>; 2]>,
-    dequeue_pos: AtomicU8,
-    enqueue_pos: AtomicU8,
+    dequeue_pos: AtomicU32,
+    enqueue_pos: AtomicU32,
 }
 
 impl<T> Q2<T> {
-    const MASK: u8 = 2 - 1;
+    const MASK: u32 = 2 - 1;
 
     /// Creates an empty queue
     pub const fn new() -> Self {
         Self {
             buffer: UnsafeCell::new([Cell::new(0), Cell::new(1)]),
-            dequeue_pos: AtomicU8::new(0),
-            enqueue_pos: AtomicU8::new(0),
+            dequeue_pos: AtomicU32::new(0),
+            enqueue_pos: AtomicU32::new(0),
         }
     }
 
@@ -130,19 +130,19 @@ unsafe impl<T> Sync for Q2<T> where T: Send {}
 /// MPMC queue with a capacity for 4 elements
 pub struct Q4<T> {
     buffer: UnsafeCell<[Cell<T>; 4]>,
-    dequeue_pos: AtomicU8,
-    enqueue_pos: AtomicU8,
+    dequeue_pos: AtomicU32,
+    enqueue_pos: AtomicU32,
 }
 
 impl<T> Q4<T> {
-    const MASK: u8 = 4 - 1;
+    const MASK: u32 = 4 - 1;
 
     /// Creates an empty queue
     pub const fn new() -> Self {
         Self {
             buffer: UnsafeCell::new([Cell::new(0), Cell::new(1), Cell::new(2), Cell::new(3)]),
-            dequeue_pos: AtomicU8::new(0),
-            enqueue_pos: AtomicU8::new(0),
+            dequeue_pos: AtomicU32::new(0),
+            enqueue_pos: AtomicU32::new(0),
         }
     }
 
@@ -171,12 +171,12 @@ unsafe impl<T> Sync for Q4<T> where T: Send {}
 /// MPMC queue with a capacity for 8 elements
 pub struct Q8<T> {
     buffer: UnsafeCell<[Cell<T>; 8]>,
-    dequeue_pos: AtomicU8,
-    enqueue_pos: AtomicU8,
+    dequeue_pos: AtomicU32,
+    enqueue_pos: AtomicU32,
 }
 
 impl<T> Q8<T> {
-    const MASK: u8 = 8 - 1;
+    const MASK: u32 = 8 - 1;
 
     /// Creates an empty queue
     pub const fn new() -> Self {
@@ -191,8 +191,8 @@ impl<T> Q8<T> {
                 Cell::new(6),
                 Cell::new(7),
             ]),
-            dequeue_pos: AtomicU8::new(0),
-            enqueue_pos: AtomicU8::new(0),
+            dequeue_pos: AtomicU32::new(0),
+            enqueue_pos: AtomicU32::new(0),
         }
     }
 
@@ -221,12 +221,12 @@ unsafe impl<T> Sync for Q8<T> where T: Send {}
 /// MPMC queue with a capacity for 16 elements
 pub struct Q16<T> {
     buffer: UnsafeCell<[Cell<T>; 16]>,
-    dequeue_pos: AtomicU8,
-    enqueue_pos: AtomicU8,
+    dequeue_pos: AtomicU32,
+    enqueue_pos: AtomicU32,
 }
 
 impl<T> Q16<T> {
-    const MASK: u8 = 16 - 1;
+    const MASK: u32 = 16 - 1;
 
     /// Creates an empty queue
     pub const fn new() -> Self {
@@ -249,8 +249,8 @@ impl<T> Q16<T> {
                 Cell::new(14),
                 Cell::new(15),
             ]),
-            dequeue_pos: AtomicU8::new(0),
-            enqueue_pos: AtomicU8::new(0),
+            dequeue_pos: AtomicU32::new(0),
+            enqueue_pos: AtomicU32::new(0),
         }
     }
 
@@ -279,12 +279,12 @@ unsafe impl<T> Sync for Q16<T> where T: Send {}
 /// MPMC queue with a capacity for 32 elements
 pub struct Q32<T> {
     buffer: UnsafeCell<[Cell<T>; 32]>,
-    dequeue_pos: AtomicU8,
-    enqueue_pos: AtomicU8,
+    dequeue_pos: AtomicU32,
+    enqueue_pos: AtomicU32,
 }
 
 impl<T> Q32<T> {
-    const MASK: u8 = 32 - 1;
+    const MASK: u32 = 32 - 1;
 
     /// Creates an empty queue
     pub const fn new() -> Self {
@@ -323,8 +323,8 @@ impl<T> Q32<T> {
                 Cell::new(30),
                 Cell::new(31),
             ]),
-            dequeue_pos: AtomicU8::new(0),
-            enqueue_pos: AtomicU8::new(0),
+            dequeue_pos: AtomicU32::new(0),
+            enqueue_pos: AtomicU32::new(0),
         }
     }
 
@@ -353,12 +353,12 @@ unsafe impl<T> Sync for Q32<T> where T: Send {}
 /// MPMC queue with a capacity for 64 elements
 pub struct Q64<T> {
     buffer: UnsafeCell<[Cell<T>; 64]>,
-    dequeue_pos: AtomicU8,
-    enqueue_pos: AtomicU8,
+    dequeue_pos: AtomicU32,
+    enqueue_pos: AtomicU32,
 }
 
 impl<T> Q64<T> {
-    const MASK: u8 = 64 - 1;
+    const MASK: u32 = 64 - 1;
 
     /// Creates an empty queue
     pub const fn new() -> Self {
@@ -429,8 +429,8 @@ impl<T> Q64<T> {
                 Cell::new(62),
                 Cell::new(63),
             ]),
-            dequeue_pos: AtomicU8::new(0),
-            enqueue_pos: AtomicU8::new(0),
+            dequeue_pos: AtomicU32::new(0),
+            enqueue_pos: AtomicU32::new(0),
         }
     }
 
@@ -458,26 +458,27 @@ unsafe impl<T> Sync for Q64<T> where T: Send {}
 
 struct Cell<T> {
     data: MaybeUninit<T>,
-    sequence: AtomicU8,
+    sequence: AtomicU32,
 }
 
 impl<T> Cell<T> {
-    const fn new(seq: u8) -> Self {
+    const fn new(seq: u32) -> Self {
         Self {
             data: MaybeUninit::uninit(),
-            sequence: AtomicU8::new(seq),
+            sequence: AtomicU32::new(seq),
         }
     }
 }
 
-unsafe fn dequeue<T>(buffer: *mut Cell<T>, dequeue_pos: &AtomicU8, mask: u8) -> Option<T> {
+// TODO: Open issue on github to fix u8 deadlock
+unsafe fn dequeue<T>(buffer: *mut Cell<T>, dequeue_pos: &AtomicU32, mask: u32) -> Option<T> {
     let mut pos = dequeue_pos.load(Ordering::Relaxed);
 
     let mut cell;
     loop {
-        cell = buffer.add(usize::from(pos & mask));
+        cell = buffer.add((pos & mask) as usize);
         let seq = (*cell).sequence.load(Ordering::Acquire);
-        let dif = i16::from(seq) - i16::from(pos.wrapping_add(1));
+        let dif = seq as i32 - pos.wrapping_add(1) as i32;
 
         if dif == 0 {
             if dequeue_pos
@@ -507,17 +508,17 @@ unsafe fn dequeue<T>(buffer: *mut Cell<T>, dequeue_pos: &AtomicU8, mask: u8) -> 
 
 unsafe fn enqueue<T>(
     buffer: *mut Cell<T>,
-    enqueue_pos: &AtomicU8,
-    mask: u8,
+    enqueue_pos: &AtomicU32,
+    mask: u32,
     item: T,
 ) -> Result<(), T> {
     let mut pos = enqueue_pos.load(Ordering::Relaxed);
 
     let mut cell;
     loop {
-        cell = buffer.add(usize::from(pos & mask));
+        cell = buffer.add((pos & mask) as usize);
         let seq = (*cell).sequence.load(Ordering::Acquire);
-        let dif = i16::from(seq) - i16::from(pos);
+        let dif = seq as i32 - pos as i32;
 
         if dif == 0 {
             if enqueue_pos

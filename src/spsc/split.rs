@@ -7,6 +7,7 @@ use crate::{
     spsc::{MultiCore, Queue},
 };
 
+#[allow(clippy::type_complexity)]
 impl<T, N, U, C> Queue<T, N, U, C>
 where
     N: ArrayLength<T>,
@@ -14,7 +15,7 @@ where
     C: sealed::XCore,
 {
     /// Splits a statically allocated queue into producer and consumer end points
-    pub fn split<'rb>(&'rb mut self) -> (Producer<'rb, T, N, U, C>, Consumer<'rb, T, N, U, C>) {
+    pub fn split(&mut self) -> (Producer<'_, T, N, U, C>, Consumer<'_, T, N, U, C>) {
         (
             Producer {
                 rb: unsafe { NonNull::new_unchecked(self) },

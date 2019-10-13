@@ -1,3 +1,5 @@
+#![allow(clippy::partialeq_ne_impl)]
+
 use core::{
     fmt,
     fmt::Write,

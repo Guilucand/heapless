@@ -19,11 +19,11 @@ pub type FnvIndexMap<K, V, N> = IndexMap<K, V, N, BuildHasherDefault<FnvHasher>>
 struct HashValue(u16);
 
 impl HashValue {
-    fn desired_pos(&self, mask: usize) -> usize {
+    fn desired_pos(self, mask: usize) -> usize {
         usize::from(self.0) & mask
     }
 
-    fn probe_distance(&self, mask: usize, current: usize) -> usize {
+    fn probe_distance(self, mask: usize, current: usize) -> usize {
         current.wrapping_sub(self.desired_pos(mask) as usize) & mask
     }
 }
@@ -57,11 +57,11 @@ impl Pos {
         }
     }
 
-    fn hash(&self) -> HashValue {
+    fn hash(self) -> HashValue {
         HashValue((self.nz.get().wrapping_sub(1) >> 16) as u16)
     }
 
-    fn index(&self) -> usize {
+    fn index(self) -> usize {
         self.nz.get().wrapping_sub(1) as u16 as usize
     }
 }
@@ -702,7 +702,7 @@ where
         K: Borrow<Q>,
         Q: ?Sized + Hash + Eq,
     {
-        if self.len() == 0 {
+        if self.is_empty() {
             return None;
         }
         let h = hash_with(key, &self.build_hasher);
